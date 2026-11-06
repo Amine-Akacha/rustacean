@@ -3,26 +3,31 @@ use std::cmp::Ordering;
 use std::io;
 
 fn main() {
-    let secret = rand::rng().random_range(0..=10);
+    let secret = rand::rng().random_range(1..=5);
 
-    println!("#### Guess Game ##### {}", secret);
-    println!("Guess a number");
+    println!("secret is {}", secret);
+
+    println!("### Guessing Game ###");
 
     loop {
         let mut guess = String::new();
 
-        io::stdin().read_line(&mut guess).expect("Wrong input");
+        println!("Guess the number!");
 
-        let guess: u32 = match guess.trim().parse() {
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("unexpected happened");
+
+        let guess: u8 = match guess.trim().parse() {
             Ok(n) => n,
             Err(_) => continue,
         };
 
         match guess.cmp(&secret) {
-            Ordering::Less => println!("too small"),
             Ordering::Greater => println!("too big"),
+            Ordering::Less => println!("too small"),
             Ordering::Equal => {
-                println!("you guessed the secret number {}", secret);
+                println!("you got it secret was {}!", secret);
                 break;
             }
         }
