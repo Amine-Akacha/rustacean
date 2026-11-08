@@ -26,12 +26,12 @@ fn main() {
 
         io::stdin().read_line(&mut input).expect("cant read temp");
 
-        let input: f32 = match input.trim().parse() {
+        match input.trim().parse() {
             Ok(n) => break n,
             Err(_) => continue,
         };
     };
-    let mut result: f32;
+    let result: f32;
     println!("current unit is {}", unit);
     if unit == "f" {
         result = f_to_c(temp);
