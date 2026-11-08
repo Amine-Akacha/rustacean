@@ -26,7 +26,7 @@ fn main() {
 
         io::stdin().read_line(&mut input).expect("cant read temp");
 
-        match input.trim().parse() {
+        match input.trim().parse::<f32>() {
             Ok(n) => break n,
             Err(_) => continue,
         };
