@@ -31,17 +31,20 @@ fn main() {
             Err(_) => continue,
         };
     };
-    let result: f32;
-    println!("current unit is {}", unit);
-    if unit == "f" {
-        result = f_to_c(temp);
-        println!("temperature from F to C is {}", result);
-    } else if unit == "c" {
-        result = c_to_f(temp);
-        println!("temperature from F to C is {}", result);
-    } else {
-        println!("couldnt read");
-    }
+
+    let result_unit: String = match unit.as_str() {
+        "f" => "C".to_string(),
+        "c" => "F".to_string(),
+        &_ => todo!(),
+    };
+
+    let result: f32 = match unit.as_str() {
+        "f" => f_to_c(temp),
+        "c" => c_to_f(temp),
+        &_ => todo!(),
+    };
+
+    println!("you converted temperature from {temp}{unit} to {result}{result_unit}");
 }
 
 fn f_to_c(x: f32) -> f32 {
