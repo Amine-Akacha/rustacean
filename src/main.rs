@@ -1,50 +1,17 @@
 use std::io;
 
 fn main() {
-    println!("Temp converter");
-    println!("choose unit you want to convert from (F or C)");
+    println!("######## Temp Converter #########");
 
-    let unit = loop {
+    println!(" Please enter your current Unit (F/C)");
+    let unit: String = loop {
         let mut input = String::new();
 
         io::stdin()
             .read_line(&mut input)
-            .expect("couldnt read unit");
+            .expect("couldnt read unit input");
+        let input: String = input.trim().parse().expect("couldnt read unit input");
 
-        let input = input.trim().to_lowercase();
-
-        if input == "c" || input == "f" {
-            break input;
-        }
-
-        println!("choose F or C");
+        println!("input, {}", input);
     };
-    println!("set your current temp in {}", unit);
-
-    let temp = loop {
-        let mut input = String::new();
-
-        io::stdin().read_line(&mut input).expect("cant read temp");
-
-        match input.trim().parse::<f32>() {
-            Ok(n) => break n,
-            Err(_) => continue,
-        };
-    };
-
-    let (result, result_unit) = match unit.as_str() {
-        "f" => (f_to_c(temp), "C"),
-        "c" => (c_to_f(temp), "F"),
-        &_ => todo!(),
-    };
-
-    println!("you converted temperature from {temp}{unit} to {result}{result_unit}");
-}
-
-fn f_to_c(x: f32) -> f32 {
-    (x - 32.0) * 5.0 / 9.0
-}
-
-fn c_to_f(x: f32) -> f32 {
-    ((x * 9.0) / 5.0) + 32.0
 }
