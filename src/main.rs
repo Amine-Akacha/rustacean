@@ -32,15 +32,9 @@ fn main() {
         };
     };
 
-    let result_unit: String = match unit.as_str() {
-        "f" => "C".to_string(),
-        "c" => "F".to_string(),
-        &_ => todo!(),
-    };
-
-    let result: f32 = match unit.as_str() {
-        "f" => f_to_c(temp),
-        "c" => c_to_f(temp),
+    let (result, result_unit) = match unit.as_str() {
+        "f" => (f_to_c(temp), "C"),
+        "c" => (c_to_f(temp), "F"),
         &_ => todo!(),
     };
 
