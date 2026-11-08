@@ -2,27 +2,36 @@ use std::io;
 
 fn main() {
     println!("Temp converter");
-    println!("choose unit you want to covert from");
-    let mut unit = String::new();
+    println!("choose unit you want to convert from (F or C)");
 
-    io::stdin().read_line(&mut unit).expect("couldnt read unit");
-    if unit.to_lowercase() != "c" || unit.to_lowercase() != "f" {
-        println!("pick F or C");
-    }
-    let unit = unit.trim().to_lowercase();
-    println!("enter temperature in {}", unit);
-    let mut temp = String::new();
+    let unit = loop {
+        let mut input = String::new();
 
-    io::stdin()
-        .read_line(&mut temp)
-        .expect("error reading temp");
+        io::stdin()
+            .read_line(&mut input)
+            .expect("couldnt read unit");
 
-    let temp: f32 = match temp.trim().parse() {
-        Ok(n) => n,
-        Err(_) => todo!(),
+        let input = input.trim().to_lowercase();
+
+        if input == "c" || input == "f" {
+            break input;
+        }
+
+        println!("choose F or C");
     };
+    println!("set your current temp in {}", unit);
 
-    let mut result: f32 = 0.0;
+    let temp = loop {
+        let mut input = String::new();
+
+        io::stdin().read_line(&mut input).expect("cant read temp");
+
+        let input: f32 = match input.trim().parse() {
+            Ok(n) => break n,
+            Err(_) => continue,
+        };
+    };
+    let mut result: f32;
     println!("current unit is {}", unit);
     if unit == "f" {
         result = f_to_c(temp);
