@@ -1,50 +1,57 @@
 use std::io;
 
 fn main() {
-    println!("Temp converter");
-    println!("choose unit you want to convert from (F or C)");
+    println!("######## Temp Converter #########");
+    const VALID_UNITS: [&str; 2] = ["c", "f"];
 
-    let unit = loop {
+    println!(" Please enter your current Unit (F/C)");
+    let unit: String = loop {
+        let mut input = String::new();
+        // read and clean user input
+        io::stdin()
+            .read_line(&mut input)
+            .expect("couldnt read unit input");
+        let input: String = input.trim().to_string().to_lowercase();
+        if VALID_UNITS.contains(&input.as_str()) {
+            break input;
+        }
+        println!("Please choose one of the vailable temps {:?}", VALID_UNITS);
+    };
+
+    println!("Current unit is {}", unit);
+    println!("Enter current temp");
+
+    let temp: f32 = loop {
         let mut input = String::new();
 
         io::stdin()
             .read_line(&mut input)
-            .expect("couldnt read unit");
+            .expect("Couldnt read temp input");
 
-        let input = input.trim().to_lowercase();
-
-        if input == "c" || input == "f" {
-            break input;
-        }
-
-        println!("choose F or C");
-    };
-    println!("set your current temp in {}", unit);
-
-    let temp = loop {
-        let mut input = String::new();
-
-        io::stdin().read_line(&mut input).expect("cant read temp");
-
-        match input.trim().parse::<f32>() {
-            Ok(n) => break n,
-            Err(_) => continue,
+        let res: f32 = match input.trim().parse() {
+            Ok(n) => n,
+            Err(_) => {
+                println!("Please enter a valid number");
+                continue;
+            }
         };
-    };
 
-    let (result, result_unit) = match unit.as_str() {
-        "f" => (f_to_c(temp), "C"),
+        break res;
+    };
+    println!("Your current temperature {temp}{unit} is getting converted");
+    let (res_temp, target_unit) = match unit.to_string().as_str() {
         "c" => (c_to_f(temp), "F"),
+        "f" => (f_to_c(temp), "C"),
         &_ => todo!(),
     };
 
-    println!("you converted temperature from {temp}{unit} to {result}{result_unit}");
-}
-
-fn f_to_c(x: f32) -> f32 {
-    (x - 32.0) * 5.0 / 9.0
+    println!("We Converted your temp from {temp}{unit} to {res_temp}{target_unit}");
 }
 
 fn c_to_f(x: f32) -> f32 {
-    ((x * 9.0) / 5.0) + 32.0
+    (x * 1.8) + 32.0
+}
+
+fn f_to_c(y: f32) -> f32 {
+    (y - 32.0) * 5.0 / 9.0
 }
