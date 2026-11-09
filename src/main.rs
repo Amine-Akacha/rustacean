@@ -1,57 +1,25 @@
-use std::io;
-
 fn main() {
-    println!("######## Temp Converter #########");
-    const VALID_UNITS: [&str; 2] = ["c", "f"];
+    let s = String::from("hello"); // s comes into scope
 
-    println!(" Please enter your current Unit (F/C)");
-    let unit: String = loop {
-        let mut input = String::new();
-        // read and clean user input
-        io::stdin()
-            .read_line(&mut input)
-            .expect("couldnt read unit input");
-        let input: String = input.trim().to_string().to_lowercase();
-        if VALID_UNITS.contains(&input.as_str()) {
-            break input;
-        }
-        println!("Please choose one of the vailable temps {:?}", VALID_UNITS);
-    };
+    takes_ownership(s); // s's value moves into the function...
+    // ... and so is no longer valid here
 
-    println!("Current unit is {}", unit);
-    println!("Enter current temp");
+    let x = 5; // x comes into scope
 
-    let temp: f32 = loop {
-        let mut input = String::new();
+    makes_copy(x); // Because i32 implements the Copy trait,
+    // x does NOT move into the function,
+    // so it's okay to use x afterward.
+    println!("x is still in scope here {x}");
+} // Here, x goes out of scope, then s. However, because s's value was moved,
+// nothing special happens.
 
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Couldnt read temp input");
+fn takes_ownership(some_string: String) {
+    // some_string comes into scope
+    println!("{some_string}");
+} // Here, some_string goes out of scope and `drop` is called. The backing
+// memory is freed.
 
-        let res: f32 = match input.trim().parse() {
-            Ok(n) => n,
-            Err(_) => {
-                println!("Please enter a valid number");
-                continue;
-            }
-        };
-
-        break res;
-    };
-    println!("Your current temperature {temp}{unit} is getting converted");
-    let (res_temp, target_unit) = match unit.to_string().as_str() {
-        "c" => (c_to_f(temp), "F"),
-        "f" => (f_to_c(temp), "C"),
-        &_ => todo!(),
-    };
-
-    println!("We Converted your temp from {temp}{unit} to {res_temp}{target_unit}");
-}
-
-fn c_to_f(x: f32) -> f32 {
-    (x * 1.8) + 32.0
-}
-
-fn f_to_c(y: f32) -> f32 {
-    (y - 32.0) * 5.0 / 9.0
-}
+fn makes_copy(some_integer: i32) {
+    // some_integer comes into scope
+    println!("{some_integer}");
+} // Here, some_integer goes out of scope. Nothing special happens.
