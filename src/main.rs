@@ -1,10 +1,8 @@
 fn main() {
-    let width1 = 30;
-    let height1 = 50;
-
+    let rect1 = (30, 50);
     println!(
         "the are of a rectangle is {} pixels",
-        get_area(width1, height1)
+        get_area(rect1.0, rect1.1)
     );
 }
 
